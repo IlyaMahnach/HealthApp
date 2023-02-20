@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">HealthApp</string>
+    <string name="button">Узнать</string>
+    <string name="textTable">Например: 211</string>
+    <string name="tittleText">Введите код пищевой дабавки, которая Вам неизвестна:</string>
+    <string name="wrong">Введите код добавки</string>
+
+
+</resources>
