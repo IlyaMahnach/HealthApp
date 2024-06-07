@@ -15,7 +15,7 @@
 # See the License for thwsgre specific language governing permissions and
 # limitations under the License.asdf
 #
-
+adf
 ##############################################################################
 ##
 ##  Gradle start up script for UN*X
