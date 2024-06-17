@@ -1,5 +1,57 @@
 workflows:
-  hello-world:
-    name: Hello world workflow
+  my-workflow:
+    name: My workflow name
+    labels:
+      - QA
+      - ${TENANT_NAME}
+    instance_type: mac_mini_m1
+    max_build_duration: 60
+    inputs: # more information about build inputs:https://docs.codemagic.io/knowledge-codemagic/build-inputs/
+      name: # input ID
+        description: Input description
+        default: Codemagic
+    environment:
+      groups:
+        - group_name
+      vars:
+        PUBLIC_ENV_VAR: "value here"
+      flutter: stable
+      xcode: latest
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+      cancel_previous_builds: false
     scripts:
-        - echo "Hello World!"
+      - name: Install dependencies
+        script: |
+          flutter pub get
+      - name: Build APK
+        script: |
+          flutter build apk --release
+      - name: Configure git
+        script: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+      - name: Commit APK
+        script: |
+          git checkout -b apk-build
+          cp build/app/outputs/flutter-apk/app-release.apk ./apk/app-release.apk
+          git add ./apk/app-release.apk
+          git commit -m "Add latest APK build"
+          git push origin apk-build
+    artifacts:
+      - build/**/outputs/bundle/**/*.aab
+      - build/app/outputs/flutter-apk/app-release.apk
+    publishing:
+      email:
+        recipients:
+          - name@example.com
+      scripts:
+        - echo 'Post-publish script'
